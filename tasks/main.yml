@@ -10,7 +10,7 @@
     - /usr/local/var/log/
     - /Users/{{ lookup('env','USER') }}/Library/LaunchAgents
 
-- name: PRE: check if MySQL is loaded
+- name: PRE check if MySQL is loaded
   shell: launchctl list
   changed_when: False
   register: mysql_loaded_result
