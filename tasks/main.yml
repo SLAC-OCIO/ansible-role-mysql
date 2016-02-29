@@ -1,5 +1,11 @@
 ---
 
+- name: PRE check if MySQL is loaded
+  shell: launchctl list
+  changed_when: False
+  register: mysql_loaded_result
+  when: "'homebrew.mxcl.mysql' not in mysql_loaded_result.stdout"  
+
 - name: create mysql directories
   file:
     path: "{{item}}"
@@ -9,11 +15,6 @@
     - /usr/local/var/mysql
     - /usr/local/var/log/
     - /Users/{{ lookup('env','USER') }}/Library/LaunchAgents
-
-- name: PRE check if MySQL is loaded
-  shell: launchctl list
-  changed_when: False
-  register: mysql_loaded_result
 
 - name: install MySQL server
   homebrew: name={{ item }} state=latest
@@ -34,6 +35,6 @@
   when: "'homebrew.mxcl.mysql' not in mysql_loaded_result.stdout"
 
 - pause: seconds=5
-
+  when: "'homebrew.mxcl.mysql' not in mysql_loaded_result.stdout"  
 
 
